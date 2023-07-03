@@ -66,9 +66,9 @@ foreach ($items as $item) {
             $attrs['class'][] = 'uk-nav-divider';
         } elseif ($children) {
             $link = [];
+            $link['role'][] = 'button';
             if (isset($item->anchor_css)) {
                 $link['class'][] = $item->anchor_css;
-                $link['role'][] = 'button';
             }
             $title = "<a{$this->attrs($link)}>{$title}</a>";
         } else {
@@ -112,16 +112,15 @@ foreach ($items as $item) {
 
         $attrs['class'][] = 'uk-parent';
 
-        $children = ['class' => []];
+        $children = ['class' => ['uk-dropdown']];
 
         if ($level == 1) {
 
-            $children['uk-dropdown'] = json_encode(array_filter([
+            $children += [
                 // Use `hover` instead of `hover, click` so dropdown can't be closed on click if in hover mode
                 'mode' => $item->type === 'heading' ? ($config("$navbar.dropdown_click") ? 'click' : 'hover') : false,
-                'container' => $config("$navbar.sticky") && in_array($config('~menu.position'), ['navbar', 'navbar-split']) ? '.tm-header > [uk-sticky]' : 'body',
-                'pos' => 'bottom-' . ($config("$menuitem.dropdown.align") ?: $config("$navbar.dropdown_align")),
-            ]));
+                'pos' => $config("$menuitem.dropdown.align") ? "bottom-{$config("$menuitem.dropdown.align")}" : false,
+            ];
 
             $children['style'] = $config("$menuitem.dropdown.width") ? "width: {$config("$menuitem.dropdown.width")}px;" : '';
 
@@ -148,7 +147,7 @@ foreach ($items as $item) {
 
                 $wrapper = [
                     'class' => [
-                        'uk-dropdown-grid',
+                        'uk-drop-grid',
                         "uk-child-width-1-{$columnsCount}",
                     ],
                     'uk-grid' => true,

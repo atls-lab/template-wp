@@ -9,7 +9,7 @@ $view = app(View::class);
 
 $result = get_view('~theme/templates/search', [
 
-    'position' => get_current_sidebar(),
+    'position' => get_current_sidebar() ?? '',
     'attrs' => [
 
         'id' => 'search-' . $view->uid(),
@@ -27,6 +27,7 @@ $result = get_view('~theme/templates/search', [
             'placeholder' => _x('Search', 'placeholder', 'yootheme'),
             'value' => get_search_query(),
             'required' => true,
+            'aria-label' => _x('Search', 'aria-label', 'yootheme'),
         ],
 
     ],
