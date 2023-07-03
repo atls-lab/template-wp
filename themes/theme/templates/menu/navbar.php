@@ -66,9 +66,9 @@ foreach ($items as $item) {
             $attrs['class'][] = 'uk-nav-divider';
         } elseif ($children) {
             $link = [];
+            $link['role'][] = 'button';
             if (isset($item->anchor_css)) {
                 $link['class'][] = $item->anchor_css;
-                $link['role'][] = 'button';
             }
             $title = "<a{$this->attrs($link)}>{$title}</a>";
         } else {
@@ -139,19 +139,12 @@ foreach ($items as $item) {
 
                 $align = $config("$menuitem.dropdown.align") ?: $config("$navbar.dropdown_align");
 
-                $children['uk-drop'] = json_encode(array_filter([
-                    // Default
-                    'clsDrop' => 'uk-navbar-dropdown',
-                    'flip' => 'false',
-                    'container' => $config("$navbar.sticky") ? '.tm-header > [uk-sticky]' : '.tm-header',
-                    'target-x' => $config("$navbar.dropdown_target") ? '.tm-header .uk-navbar' : null,
-                    'target-y' => $config("$navbar.dropbar") ? '.tm-header .uk-navbar-container' : null,
-                    // New
+                $children += [
                     'mode' => $mode,
                     'pos' => "bottom-{$align}",
                     'stretch' => $stretch ? 'x' : null,
                     'boundary' => $stretch ? ".tm-header .uk-{$stretch}" : null,
-                ]));
+                ];
             }
 
             if (!$stretch) {
@@ -183,14 +176,6 @@ foreach ($items as $item) {
                 $columns = Arr::columns($item->children, $config("$menuitem.dropdown.columns", 1));
                 $columnsCount = count($columns);
 
-                $wrapper = [
-                    'class' => [
-                        'uk-navbar-dropdown-grid',
-                        "uk-child-width-1-{$columnsCount}",
-                    ],
-                    'uk-grid' => true,
-                ];
-
                 if ($columnsCount > 1 && !$stretch) {
                     $children['class'][] = "uk-navbar-dropdown-width-{$columnsCount}";
                 }
@@ -201,7 +186,18 @@ foreach ($items as $item) {
                     $columnsStr .= "<div><ul class=\"uk-nav {$nav_style}\">\n{$this->self(['items' => $column, 'level' => $level + 1])}</ul></div>";
                 }
 
-                $children = "{$indention}<div{$this->attrs($children)}><div{$this->attrs($wrapper)}>{$columnsStr}</div></div>";
+                if ($columnsCount > 1) {
+                    $wrapper = [
+                        'class' => [
+                            'uk-drop-grid',
+                            "uk-child-width-1-{$columnsCount}",
+                        ],
+                        'uk-grid' => true,
+                    ];
+                    $columnsStr = "<div{$this->attrs($wrapper)}>{$columnsStr}</div>";
+                }
+
+                $children = "{$indention}<div{$this->attrs($children)}>{$columnsStr}</div>";
             }
 
         } else {

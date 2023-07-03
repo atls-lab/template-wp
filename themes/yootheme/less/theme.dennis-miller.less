@@ -92,7 +92,7 @@ Preview: https://yootheme.com/api/style/dennis-miller/colored-blue.jpg
         &::before { left: 0; }
 
         border@{theme-page-border-mode}: @theme-page-border-width solid @theme-page-border;
-    
+
     }
 
 }
@@ -148,7 +148,7 @@ Preview: https://yootheme.com/api/style/dennis-miller/colored-blue.jpg
         bottom: -(@theme-box-decoration-primary-height / 2);
         left: ~'calc(50% - (@{theme-box-decoration-primary-width} / 2))';
         width: @theme-box-decoration-primary-width;
-        height: @theme-box-decoration-primary-height;   
+        height: @theme-box-decoration-primary-height;
         background-color: @theme-box-decoration-primary-background;
     }
 
@@ -184,8 +184,8 @@ Preview: https://yootheme.com/api/style/dennis-miller/colored-blue.jpg
 
 .hook-inverse-box-decoration-secondary() when not (@theme-box-decoration-secondary-background = transparent) {
 
-    &::before { 
-        .svg-fill("../../../../uikit-themes/master-dennis-miller/images/box-decoration-secondary-image.svg", "#000", @inverse-theme-box-decoration-secondary-background, border-image-source); 
+    &::before {
+        .svg-fill("../../../../uikit-themes/master-dennis-miller/images/box-decoration-secondary-image.svg", "#000", @inverse-theme-box-decoration-secondary-background, border-image-source);
         background-color: transparent;
     }
 

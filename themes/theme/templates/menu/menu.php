@@ -8,15 +8,18 @@ use function YOOtheme\app;
 $mobile = '~theme.mobile';
 $header = '~theme.header';
 $dialog = '~theme.dialog';
+$navbar = '~theme.navbar';
 
 // Menu ID
 $attrs['id'] = $config('~menu.tag_id');
 
-$hasHeaderParent = function ($items) {
-    return Arr::some($items, function ($item) {
-        return $item->type == 'heading' && !empty($item->children) && isset($item->url) && ($item->url === '#' || $item->url === '');
-    });
-};
+$hasHeaderParent = fn($items) =>
+    Arr::some($items, fn($item) =>
+        $item->type == 'heading' &&
+        !empty($item->children) &&
+        isset($item->url) &&
+        ($item->url === '#' || $item->url === '')
+    );
 
 // Set `nav` menu_type to default in header positions
 if ($config('~menu.type') == 'nav' && preg_match('/^(toolbar-(left|right)|logo(-mobile)?|navbar(-split|-push|-mobile)?|header(-split|-mobile)?)$/', $config('~menu.position'))) {
@@ -149,6 +152,16 @@ if ($type !== 'nav') {
     }
 
     $menuConfig = $config->set('~menu', $menuConfig);
+}
+
+// Dropnav
+if (in_array($type, ['subnav', 'iconnav'])) {
+    $dropnav_attrs = [
+        'boundary' => 'false', // Has to be a string
+        'container' => $config("$navbar.sticky") && in_array($config('~menu.position'), ['navbar', 'navbar-split']) ? '.tm-header > [uk-sticky]' : 'body',
+    ];
+
+    $attrs['uk-dropnav'] = json_encode(array_filter($dropnav_attrs));
 }
 
 ?>
